@@ -5,6 +5,7 @@ doc = Nokogiri::XML(File.open('/Users/ckdake/Library/Application Support/Google 
 
 combined = { type: 'MultiLineString', coordinates: [] }
 years = {}
+months = {}
 
 doc.css('Placemark').each do |p|
   name = p.css('name').text
@@ -18,6 +19,10 @@ doc.css('Placemark').each do |p|
     year = name[0,4]
     years[year] ||= []
     years[year] << coordinates
+    
+    month = name[0,6]
+    months[month] ||= []
+    months[month] << coordinates
 
     open("split/#{name}.geojson", 'w') { |f|
       f.puts({ type: 'LineString', coordinates: coordinates }.to_json)
@@ -29,6 +34,12 @@ open("combined.geojson", 'w') { |f| f.puts combined.to_json }
 
 years.each_pair do |year,coordinates|
   open("years/#{year}.geojson", 'w') { |f|
+    f.puts({ type: 'MultiLineString', coordinates: coordinates }.to_json)
+  }
+end
+
+months.each_pair do |month,coordinates|
+  open("months/#{month}.geojson", 'w') { |f|
     f.puts({ type: 'MultiLineString', coordinates: coordinates }.to_json)
   }
 end
