@@ -13,11 +13,11 @@ doc.css('Placemark').each do |p|
                .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2')
                .gsub(/\s+/, '_')
     coordinates = p.css('coordinates').first.text.split(' ').collect{|i| i.split(',')}
-    combined[:coordinates] += coordinates
+    combined[:coordinates] << coordinates
 
     year = name[0,4]
     years[year] ||= []
-    years[year] += coordinates
+    years[year] << coordinates
 
     open("split/#{name}.geojson", 'w') { |f|
       f.puts({ type: 'LineString', coordinates: coordinates }.to_json)
