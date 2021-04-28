@@ -30,16 +30,47 @@ doc.css('Placemark').each do |p|
   end
 end
 
-open("combined.geojson", 'w') { |f| f.puts combined.to_json }
+combined_feature_collection = {
+  type: "FeatureCollection",
+  features: [{
+    type: "Feature",
+    properties: {},
+    geometry: combined
+  }]
+}
+
+open("combined.geojson", 'w') { |f| f.puts combined_feature_collection.to_json }
 
 years.each_pair do |year,coordinates|
+  years_feature_collection = {
+    type: "FeatureCollection",
+    features: [{
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "MultiLineString",
+        coordinates: coordinates
+      }
+    }]
+  }
   open("years/#{year}.geojson", 'w') { |f|
-    f.puts({ type: 'MultiLineString', coordinates: coordinates }.to_json)
+    f.puts(years_feature_collection.to_json)
   }
 end
 
 months.each_pair do |month,coordinates|
+  months_feature_collection = {
+    type: "FeatureCollection",
+    features: [{
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "MultiLineString",
+        coordinates: coordinates
+      }
+    }]
+  }
   open("months/#{month}.geojson", 'w') { |f|
-    f.puts({ type: 'MultiLineString', coordinates: coordinates }.to_json)
+    f.puts(months_feature_collection.to_json)
   }
 end
