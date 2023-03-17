@@ -13,7 +13,9 @@ doc.css('Placemark').each do |p|
     name = name.gsub(/[^\w\s_-]+/, '')
                .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2')
                .gsub(/\s+/, '_')
-    coordinates = p.css('coordinates').first.text.split(' ').collect{|i| i.split(',')}
+    coordinates_strings = p.css('coordinates').first.text.split(' ').collect{|i| i.split(',')}
+    coordinates = coordinates_strings.map { |a| a.map { |b| b.to_f} }
+    
     combined[:coordinates] << coordinates
 
     year = name[0,4]

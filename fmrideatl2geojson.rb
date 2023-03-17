@@ -9,7 +9,11 @@ months = {}
 
 doc.css('Placemark').each do |p|
   name = p.css('name').text
-  coordinates = p.css('coordinates').first.text.split(' ').collect{|i| i.split(',')}
+  coordinates_strings = p.css('coordinates').first.text.split(' ').collect{|i| i.split(',')}
+
+
+  coordinates = coordinates_strings.map { |a| a.map { |b| b.to_f} }
+
   combined[:coordinates] << coordinates
 
   year = name
